@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  backend:
+    environment:
+      NODE_ENV: development # 개발 환경일 경우 development
+    networks:
+      - kaitly_network
+
+  frontend:
+    environment:
+      NODE_ENV: development # 개발 환경일 경우 development
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - kaitly_network
+
+volumes:
+  mysql_data:
