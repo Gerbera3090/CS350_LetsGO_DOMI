@@ -15,7 +15,7 @@ export const Track = mysqlTable(
     id: int('id').autoincrement().primaryKey().notNull(),
     lmId: int('lm_id').notNull(), // LaundryMachine 테이블과 연결
     trackerId: int('tracker_id').notNull(), // Tracker 테이블과 연결
-    intensity: int('intensity'), // 전송된 강도
+    intensity: int('intensity').notNull(), // 전송된 강도
     createdAt: timestamp('created_at').defaultNow().notNull(), // 생성 시간
   },
   (table) => ({

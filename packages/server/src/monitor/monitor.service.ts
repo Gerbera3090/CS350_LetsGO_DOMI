@@ -4,6 +4,7 @@ import {
   ApiMnt001RequestBody,
   ApiMnt001RequestParam,
   ApiMnt001Response,
+  ApiMnt002Response,
 } from '@depot/api/monitor';
 
 @Injectable()
@@ -23,5 +24,12 @@ export class MonitorService {
       throw new Error('Failed to insert');
     }
     return { trackId: res };
+  }
+
+  async getTracks(): Promise<ApiMnt002Response> {
+    const res = await this.MonitorRepository.selectTrack({}, {}, [
+      { createdAt: 'DESC' },
+    ]);
+    return { trackData: res };
   }
 }

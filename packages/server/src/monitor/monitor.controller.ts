@@ -4,6 +4,7 @@ import {
   ApiMnt001RequestBody,
   ApiMnt001RequestParam,
   ApiMnt001Response,
+  ApiMnt002Response,
 } from '@depot/api/monitor';
 
 @Controller()
@@ -14,6 +15,7 @@ export class MonitorController {
     return 'hello in monitor';
   }
 
+  // Tracker가 track을 보내는 API
   @Post('/monitor/track/:lmId')
   async postTrackData(
     @Param('lmId') lmId: string,
@@ -29,5 +31,10 @@ export class MonitorController {
       body as ApiMnt001RequestBody,
     );
     return res;
+  }
+
+  @Get('/monitor/tracks')
+  async getTracks(): Promise<ApiMnt002Response> {
+    return await this.monitorService.getTracks();
   }
 }

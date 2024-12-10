@@ -3,7 +3,6 @@ export type ApiMnt001RequestParam = {
 };
 export type ApiMnt001RequestBody = {
   trackerId: number;
-  trackTime: Date;
   intensity: number;
 };
 export type ApiMnt001Response = {
