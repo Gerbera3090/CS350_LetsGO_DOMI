@@ -37,6 +37,7 @@ export class LMService {
           reportStatusEnum: lm.reportId ? lm.reportId : LMStatusE.Available,
           last: lm.last,
           alarmed: lm.usageAlarmAlarmed ? lm.usageAlarmAlarmed : false,
+          isFLM: lm.flmId ? true : false,
         };
       }),
     );

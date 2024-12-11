@@ -2,7 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { eq, isNotNull, isNull, and, asc, desc, sql, or } from 'drizzle-orm';
 import { MySql2Database } from 'drizzle-orm/mysql2';
 import { DBAsyncProvider } from 'src/db/db.provider';
-import { LM, Track, LMT, Report, LaundryRoom, UsageAlarm } from 'src/db/schema';
+import {
+  LM,
+  Track,
+  LMT,
+  Report,
+  LaundryRoom,
+  UsageAlarm,
+  FLM,
+} from 'src/db/schema';
 import * as schema from 'src/db/schema';
 
 @Injectable()
@@ -25,6 +33,7 @@ export class LMRepository {
       usageAlarmId: number | null;
       usageAlarmAlarmed: boolean;
       usageAlarmCreatedAt: Date | null;
+      flmId: number | null;
     };
 
     const res = await this.db
@@ -56,6 +65,7 @@ export class LMRepository {
           sql`COALESCE(MAX(${UsageAlarm.createdAt}), NULL)`.as(
             'usageAlarmCreatedAt',
           ),
+        flmId: sql`COALESCE(MAX(${FLM.id}), NULL)`.as('flmId'),
       })
       .from(LM)
       .innerJoin(LaundryRoom, eq(LM.laundryRoomId, LaundryRoom.id))
@@ -65,6 +75,7 @@ export class LMRepository {
         UsageAlarm,
         and(eq(LM.id, UsageAlarm.lmId), eq(UsageAlarm.userId, userId)),
       )
+      .leftJoin(FLM, eq(LM.id, FLM.lmId))
       .where(eq(LaundryRoom.dormitoryFloorId, dormitoryFloorId))
       .groupBy(LM.id, LM.code, LM.lmTypeEnumId)
       .execute();
