@@ -49,6 +49,7 @@ export class LMController {
   async postFLM(
     @Body() body: ApiLmc003RequestBody,
   ): Promise<ApiLmc003Response> {
+    console.log('POST /lms/flm');
     console.log(JSON.stringify({ body }));
     const res = await this.lmService.postFLM(body.lmId, body.userId);
     return { flmId: res };
@@ -58,6 +59,7 @@ export class LMController {
   async deleteFLM(
     @Body() body: ApiLmc004RequestBody,
   ): Promise<ApiLmc004Response> {
+    console.log('DELETE /lms/flm');
     console.log(JSON.stringify({ body }));
     const res = await this.lmService.deleteFLM(body.lmId, body.userId);
     return { flmId: res };

@@ -80,4 +80,34 @@ export const UsageAlarm = mysqlTable(
   }),
 );
 
+// UsageAlarm 테이블
+export const ReserveAlarm = mysqlTable(
+  'reserve_alarm', // 테이블 이름
+  {
+    id: int('id').autoincrement().primaryKey().notNull(), // PK
+    lmId: int('lm_id') // FK to LM
+      .notNull(),
+    userId: int('user_id') // FK to User
+      .notNull(),
+    alarmed: boolean('alarmed') // Boolean 필드
+      .default(false)
+      .notNull(),
+    createdAt: timestamp('created_at') // 생성 시간
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    lmFk: foreignKey({
+      columns: [table.lmId],
+      foreignColumns: [LM.id], // LM 테이블의 id를 참조 (수정 필요)
+      name: 'reserve_alarm_lm_fk', // 외래키 이름
+    }),
+    userFk: foreignKey({
+      columns: [table.userId],
+      foreignColumns: [User.id], // User 테이블의 id를 참조 (수정 필요)
+      name: 'reserve_alarm_user_fk', // 외래키 이름
+    }),
+  }),
+);
+
 export type TrackT = InferSelectModel<typeof Track>;
