@@ -5,9 +5,15 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { MonitorModule } from './monitor/monitor.module';
 import { DBModule } from './db/db.module';
+import { LMModule } from './lm/lm.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), MonitorModule, DBModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    MonitorModule,
+    DBModule,
+    LMModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

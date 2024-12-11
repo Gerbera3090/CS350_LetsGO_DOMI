@@ -6,6 +6,7 @@ export type ApiMnt002Response = {
     trackerId: number;
     intensity: number;
     lmId: number;
+    last: number;
     createdAt: Date;
   }[];
 };

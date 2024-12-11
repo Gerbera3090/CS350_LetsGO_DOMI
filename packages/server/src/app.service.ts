@@ -219,6 +219,63 @@ export class AppService {
       }));
       console.log(JSON.stringify(trackers));
       await trx.insert(schema.Tracker).values(trackers).execute();
+
+      const users = [
+        {
+          email: 'john.doe@example.com',
+          password: 'password123',
+          name: 'John Doe',
+          dormitoryId: 3,
+          dormitoryFloor: 3,
+          dormitoryRoom: 305,
+          gender: 2,
+          userTypeEnumId: 1,
+        },
+        {
+          email: 'jane.smith@example.com',
+          password: 'password456',
+          name: 'Jane Smith',
+          dormitoryId: 4,
+          dormitoryFloor: 3,
+          dormitoryRoom: 212,
+          gender: 2,
+          userTypeEnumId: 1,
+        },
+        {
+          email: 'mark.jones@example.com',
+          password: 'password789',
+          name: 'Mark Jones',
+          dormitoryId: 1,
+          dormitoryFloor: 3,
+          dormitoryRoom: 301,
+          gender: 1,
+          userTypeEnumId: 1,
+        },
+        {
+          email: 'emily.white@example.com',
+          password: 'password321',
+          name: 'Emily White',
+          dormitoryId: 3,
+          dormitoryFloor: 3,
+          dormitoryRoom: 301,
+          gender: 2,
+          userTypeEnumId: 1,
+        },
+        {
+          email: 'alex.brown@example.com',
+          password: 'password654',
+          name: 'Alex Brown',
+          dormitoryId: 1,
+          dormitoryFloor: 3,
+          dormitoryRoom: 203,
+          gender: 1,
+          userTypeEnumId: 1,
+        },
+      ] as schema.UserInsertT[];
+      const resDorm = await trx.select().from(schema.Dormitory).execute();
+      console.log(JSON.stringify(resDorm));
+      // User 초기 데이터 삽입
+      await trx.insert(schema.User).values(users);
       return true;
     });
     return res;

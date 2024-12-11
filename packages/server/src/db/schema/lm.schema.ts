@@ -8,6 +8,7 @@ import {
 import { User } from './user.schema';
 import { LaundryRoom } from './dormitory.schema';
 import { LMTypeEnum } from './enum.schema'; // 예시로 LMTypeEnum을 사용합니다. 실제 Enum 테이블을 정의해야 함.
+import { InferSelectModel } from 'drizzle-orm';
 
 export const LM = mysqlTable(
   'lm',
@@ -55,3 +56,6 @@ export const FLM = mysqlTable(
     }),
   }),
 );
+
+export type LMT = InferSelectModel<typeof LM>;
+export type FLMT = InferSelectModel<typeof FLM>;

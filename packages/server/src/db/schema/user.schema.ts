@@ -7,17 +7,17 @@ import {
 } from 'drizzle-orm/mysql-core';
 import { UserTypeEnum } from './enum.schema'; // UserTypeEnum이 정의된 위치
 import { Dormitory } from './dormitory.schema'; // Dormitory가 정의된 위치
+import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 
 export const User = mysqlTable(
   'user',
   {
     id: int('id').autoincrement().primaryKey().notNull(),
     email: varchar('email', { length: 100 }).notNull(),
-    loginId: varchar('login_id', { length: 100 }).notNull(),
     password: varchar('password', { length: 100 }).notNull(),
     name: varchar('name', { length: 100 }).notNull(),
     dormitoryId: int('dormitory_id').notNull(),
-    userTypeEnumId: int('user_type_enum_id').notNull(),
+    userTypeEnumId: int('user_type_enum_id').notNull().default(1),
     dormitoryFloor: int('dormitory_floor'),
     dormitoryRoom: int('dormitory_room'),
     gender: int('gender'),
@@ -38,3 +38,6 @@ export const User = mysqlTable(
     }),
   }),
 );
+
+export type UserT = InferSelectModel<typeof User>;
+export type UserInsertT = InferInsertModel<typeof User>;

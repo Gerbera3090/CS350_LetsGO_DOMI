@@ -51,6 +51,7 @@ export const LaundryRoom = mysqlTable(
   }),
 );
 
+export type DormitoryT = InferInsertModel<typeof Dormitory>;
 export type DormitoryInsertT = InferInsertModel<typeof Dormitory>;
 export type DormitoryFloorInsertT = InferInsertModel<typeof DormitoryFloor>;
 export type LaundryRoomInsertT = InferInsertModel<typeof LaundryRoom>;

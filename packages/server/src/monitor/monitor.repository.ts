@@ -14,11 +14,13 @@ export class MonitorRepository {
     lmId: number,
     trackerId: number,
     intensity: number,
+    last: number,
   ): Promise<number> {
     const res = await this.db.insert(schema.Track).values({
       lmId,
       trackerId,
       intensity,
+      last,
     });
     console.log(JSON.stringify({ lmId, trackerId, intensity }));
     console.log(JSON.stringify(res[0].insertId));

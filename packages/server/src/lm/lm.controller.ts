@@ -1,0 +1,31 @@
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { LMService } from './lm.service';
+import { ApiLmc001RequestQuery, ApiLmc001Response } from '@depot/api/lm';
+
+@Controller()
+export class LMController {
+  constructor(private readonly lmService: LMService) {}
+  @Get('/lms/hello')
+  getHello(): string {
+    return 'hello in lm';
+  }
+
+  // lm
+  @Get('/lms')
+  async getLMs(
+    @Query('userId') userId: string,
+    @Query('dormitoryFloorId') dormitoryFloorId: string,
+  ): Promise<ApiLmc001Response> {
+    const parsedUserId = Number(userId);
+    const parsedFloorId = Number(dormitoryFloorId);
+    if (isNaN(parsedUserId) || isNaN(parsedFloorId)) {
+      throw new Error('Invalid parsed Id'); // lmId 유효성 검사
+    }
+    console.log(JSON.stringify({ userId, dormitoryFloorId }));
+    const res = await this.lmService.getLMs({
+      userId: parsedUserId,
+      dormitoryFloorId: parsedFloorId,
+    });
+    return res;
+  }
+}

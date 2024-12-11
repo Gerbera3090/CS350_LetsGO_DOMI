@@ -26,6 +26,7 @@ const Page: React.FC<PageProps> = () => {
               <th style={cellStyle}>Intensity</th>
               <th style={cellStyle}>LM ID</th>
               <th style={cellStyle}>Timestamp</th>
+              <th style={cellStyle}>Last</th>
             </tr>
           </thead>
           <tbody>
@@ -35,6 +36,7 @@ const Page: React.FC<PageProps> = () => {
                 <td style={cellStyle}>{track.intensity}</td>
                 <td style={cellStyle}>{track.lmId}</td>
                 <td style={cellStyle}>{track.createdAt.toString()}</td>
+                <td style={cellStyle}>{track.last}</td>
               </tr>
             ))}
           </tbody>
