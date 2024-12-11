@@ -1,5 +1,5 @@
 import { int, varchar, mysqlTable, foreignKey } from 'drizzle-orm/mysql-core';
-import { InferInsertModel } from 'drizzle-orm';
+import { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 // Dormitory 테이블
 export const Dormitory = mysqlTable('dormitory', {
   id: int('id').autoincrement().primaryKey().notNull(),
@@ -51,6 +51,8 @@ export const LaundryRoom = mysqlTable(
   }),
 );
 
+export type DormitoryT = InferSelectModel<typeof Dormitory>;
+export type DormitoryFloorT = InferSelectModel<typeof DormitoryFloor>;
 export type DormitoryInsertT = InferInsertModel<typeof Dormitory>;
 export type DormitoryFloorInsertT = InferInsertModel<typeof DormitoryFloor>;
 export type LaundryRoomInsertT = InferInsertModel<typeof LaundryRoom>;

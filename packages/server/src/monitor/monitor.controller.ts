@@ -1,10 +1,16 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { MonitorService } from './monitor.service';
 import {
   ApiMnt001RequestBody,
   ApiMnt001RequestParam,
   ApiMnt001Response,
   ApiMnt002Response,
+  ApiMnt003RequestBody,
+  ApiMnt003Response,
+  ApiMnt004RequestBody,
+  ApiMnt004Response,
+  ApiMnt005RequestBody,
+  ApiMnt005Response,
 } from '@depot/api/monitor';
 
 @Controller()
@@ -36,5 +42,60 @@ export class MonitorController {
   @Get('/monitor/tracks')
   async getTracks(): Promise<ApiMnt002Response> {
     return await this.monitorService.getTracks();
+  }
+
+  // usageAlarm을 추가하는 API
+  @Post('/monitor/usage-alarm')
+  async postUsageAlarm(
+    @Body() body: ApiMnt003RequestBody,
+  ): Promise<ApiMnt003Response> {
+    console.log('POST /monitor/usage-alarm');
+    console.log(JSON.stringify({ body }));
+    const res = await this.monitorService.postUsageAlarm(
+      body.lmId,
+      body.userId,
+    );
+    return { usageAlarmId: res };
+  }
+  // usageAlarm을 삭제하는 API
+  @Delete('/monitor/usage-alarm')
+  async deleteUsageAlarm(
+    @Body() body: ApiMnt004RequestBody,
+  ): Promise<ApiMnt004Response> {
+    console.log('DELETE /monitor/usage-alarm');
+    console.log(JSON.stringify({ body }));
+    const res = await this.monitorService.deleteUsageAlarm(
+      body.lmId,
+      body.userId,
+    );
+    return { usageAlarmId: res };
+  }
+
+  // reserveAlarm을 추가하는 API
+  @Post('/monitor/reserve-alarm')
+  async postReserveAlarm(
+    @Body() body: ApiMnt005RequestBody,
+  ): Promise<ApiMnt005Response> {
+    console.log('POST /lms/flm');
+    console.log(JSON.stringify({ body }));
+    const res = await this.monitorService.postReserveAlarm(
+      body.lmId,
+      body.userId,
+    );
+    return { reserveAlarmId: res };
+  }
+
+  // usageAlarm을 삭제하는 API
+  @Delete('/monitor/reserve-alarm')
+  async deleteReserveAlarm(
+    @Body() body: ApiMnt005RequestBody,
+  ): Promise<ApiMnt005Response> {
+    console.log('DELETE /lms/flm');
+    console.log(JSON.stringify({ body }));
+    const res = await this.monitorService.deleteReserveAlarm(
+      body.lmId,
+      body.userId,
+    );
+    return { reserveAlarmId: res };
   }
 }
