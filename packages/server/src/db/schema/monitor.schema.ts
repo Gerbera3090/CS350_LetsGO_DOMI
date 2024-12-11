@@ -111,3 +111,5 @@ export const ReserveAlarm = mysqlTable(
 );
 
 export type TrackT = InferSelectModel<typeof Track>;
+export type UsageAlarmT = InferSelectModel<typeof UsageAlarm>;
+export type ReserveAlarmT = InferSelectModel<typeof ReserveAlarm>;

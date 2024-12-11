@@ -79,6 +79,15 @@ CREATE TABLE `lm` (
 	CONSTRAINT `lm_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
+CREATE TABLE `reserve_alarm` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`lm_id` int NOT NULL,
+	`user_id` int NOT NULL,
+	`alarmed` boolean NOT NULL DEFAULT false,
+	`created_at` timestamp NOT NULL DEFAULT (now()),
+	CONSTRAINT `reserve_alarm_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
 CREATE TABLE `track` (
 	`id` int AUTO_INCREMENT NOT NULL,
 	`lm_id` int NOT NULL,
@@ -136,6 +145,8 @@ ALTER TABLE `flm` ADD CONSTRAINT `flm_user_id_fk` FOREIGN KEY (`user_id`) REFERE
 ALTER TABLE `flm` ADD CONSTRAINT `flm_lm_id_fk` FOREIGN KEY (`lm_id`) REFERENCES `lm`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `lm` ADD CONSTRAINT `lau_machine_laundry_room_id_fk` FOREIGN KEY (`laundry_room_id`) REFERENCES `laundry_room`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `lm` ADD CONSTRAINT `lau_machine_lm_type_enum_id_fk` FOREIGN KEY (`lm_type_enum_id`) REFERENCES `lm_type_enum`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `reserve_alarm` ADD CONSTRAINT `reserve_alarm_lm_fk` FOREIGN KEY (`lm_id`) REFERENCES `lm`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE `reserve_alarm` ADD CONSTRAINT `reserve_alarm_user_fk` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `track` ADD CONSTRAINT `track_laundry_machine_id_fk` FOREIGN KEY (`lm_id`) REFERENCES `lm`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `track` ADD CONSTRAINT `track_tracker_id_fk` FOREIGN KEY (`tracker_id`) REFERENCES `tracker`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE `tracker` ADD CONSTRAINT `tracker_lm_id_fk` FOREIGN KEY (`lm_id`) REFERENCES `lm`(`id`) ON DELETE no action ON UPDATE no action;--> statement-breakpoint

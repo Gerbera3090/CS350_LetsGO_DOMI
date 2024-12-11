@@ -56,4 +56,56 @@ export class MonitorService {
     ]);
     return { trackData: res };
   }
+
+  async postUsageAlarm(lmId: number, userId: number): Promise<number> {
+    const checkAlreadyUsageAlarm =
+      await this.MonitorRepository.selectUsageAlarm({
+        lmId,
+        userId,
+      });
+    if (checkAlreadyUsageAlarm.length > 0) {
+      throw new Error('Already UsageAlarm');
+    }
+    const res = await this.MonitorRepository.insertUsageAlarm(lmId, userId);
+    return res;
+  }
+
+  async deleteUsageAlarm(lmId: number, userId: number): Promise<number> {
+    const checkAlreadyUsageAlarm =
+      await this.MonitorRepository.selectUsageAlarm({
+        lmId,
+        userId,
+      });
+    if (checkAlreadyUsageAlarm.length === 0) {
+      throw new Error('There is No UsageAlarm');
+    }
+    const res = await this.MonitorRepository.deleteUsageAlarm(lmId, userId);
+    return checkAlreadyUsageAlarm[0].id;
+  }
+
+  async postReserveAlarm(lmId: number, userId: number): Promise<number> {
+    const checkAlreadyReserveAlarm =
+      await this.MonitorRepository.selectReserveAlarm({
+        lmId,
+        userId,
+      });
+    if (checkAlreadyReserveAlarm.length > 0) {
+      throw new Error('Already ReserveAlarm');
+    }
+    const res = await this.MonitorRepository.insertReserveAlarm(lmId, userId);
+    return res;
+  }
+
+  async deleteReserveAlarm(lmId: number, userId: number): Promise<number> {
+    const checkAlreadyReserveAlarm =
+      await this.MonitorRepository.selectReserveAlarm({
+        lmId,
+        userId,
+      });
+    if (checkAlreadyReserveAlarm.length === 0) {
+      throw new Error('There is No ReserveAlarm');
+    }
+    const res = await this.MonitorRepository.deleteReserveAlarm(lmId, userId);
+    return checkAlreadyReserveAlarm[0].id;
+  }
 }
