@@ -15,9 +15,9 @@ export class LMRepository {
       id: number;
       code: string;
       lmTypeEnum: number;
-      trackId: number | null;
-      intensity: number | null;
-      last: number | null;
+      trackId: number;
+      intensity: number;
+      last: number;
       trackCreatedAt: Date | null;
       reportId: number | null;
       reportStatusEnumId: number | null;
@@ -32,9 +32,9 @@ export class LMRepository {
         id: LM.id,
         code: LM.code,
         lmTypeEnum: LM.lmTypeEnumId,
-        trackId: sql`COALESCE(MAX(${Track.id}), NULL)`.as('trackId'),
-        intensity: sql`COALESCE(MAX(${Track.intensity}), NULL)`.as('intensity'),
-        last: sql`COALESCE(MAX(${Track.last}), NULL)`.as('last'),
+        trackId: sql`COALESCE(MAX(${Track.id}), 0)`.as('trackId'),
+        intensity: sql`COALESCE(MAX(${Track.intensity}), 1023)`.as('intensity'),
+        last: sql`COALESCE(MAX(${Track.last}), 0)`.as('last'),
         trackCreatedAt: sql`COALESCE(MAX(${Track.createdAt}), NULL)`.as(
           'trackCreatedAt',
         ),
