@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "email": "john.doe@example.com",
+    "login_id": "john_doe",
+    "password": "password123",
+    "name": "John Doe",
+    "dormitory_id": 101,
+    "dormitory_floor": 3,
+    "dormitory_room": 205,
+    "gender": 1
+  },
+  {
+    "id": 2,
+    "email": "jane.smith@example.com",
+    "login_id": "jane_smith",
+    "password": "password456",
+    "name": "Jane Smith",
+    "dormitory_id": 102,
+    "dormitory_floor": 2,
+    "dormitory_room": 112,
+    "gender": 2
+  },
+  {
+    "id": 3,
+    "email": "mark.jones@example.com",
+    "login_id": "mark_jones",
+    "password": "password789",
+    "name": "Mark Jones",
+    "dormitory_id": 103,
+    "dormitory_floor": 1,
+    "dormitory_room": 101,
+    "gender": 1
+  },
+  {
+    "id": 4,
+    "email": "emily.white@example.com",
+    "login_id": "emily_white",
+    "password": "password321",
+    "name": "Emily White",
+    "dormitory_id": 104,
+    "dormitory_floor": 4,
+    "dormitory_room": 301,
+    "gender": 2
+  },
+  {
+    "id": 5,
+    "email": "alex.brown@example.com",
+    "login_id": "alex_brown",
+    "password": "password654",
+    "name": "Alex Brown",
+    "dormitory_id": 105,
+    "dormitory_floor": 2,
+    "dormitory_room": 203,
+    "gender": 1
+  }
+]

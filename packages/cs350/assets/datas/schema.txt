@@ -1,0 +1,11 @@
+CREATE TABLE Users (
+    id              INT
+    email           VARCHAR(100)
+    login_id        VARCHAR(100)
+    password        VARCHAR(100)
+    name            VARCHAR(100)
+    dormitory_id    INT
+    dormitory_floor INT
+    dormitory_room  INT
+    gender          INT
+)
