@@ -1,10 +1,20 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { LMService } from './lm.service';
 import {
   ApiLmc001RequestQuery,
   ApiLmc001Response,
   ApiLmc003Response,
   ApiLmc003RequestBody,
+  ApiLmc004RequestBody,
+  ApiLmc004Response,
 } from '@depot/api/lm';
 
 @Controller()
@@ -41,6 +51,15 @@ export class LMController {
   ): Promise<ApiLmc003Response> {
     console.log(JSON.stringify({ body }));
     const res = await this.lmService.postFLM(body.lmId, body.userId);
+    return { flmId: res };
+  }
+
+  @Delete('/lms/flm')
+  async deleteFLM(
+    @Body() body: ApiLmc004RequestBody,
+  ): Promise<ApiLmc004Response> {
+    console.log(JSON.stringify({ body }));
+    const res = await this.lmService.deleteFLM(body.lmId, body.userId);
     return { flmId: res };
   }
 }

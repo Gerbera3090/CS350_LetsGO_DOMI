@@ -61,4 +61,15 @@ export class LMService {
     const res = await this.lmRepository.insertFLM(lmId, userId, priority);
     return res;
   }
+
+  async deleteFLM(lmId: number, userId: number): Promise<number> {
+    const checkAlreadyFLM = await this.lmRepository.selectFLM({ userId, lmId });
+    if (checkAlreadyFLM.length === 0) {
+      throw new Error('There is No FLM');
+    }
+
+    const res = await this.lmRepository.deleteFLM(lmId, userId);
+
+    return checkAlreadyFLM[0].id;
+  }
 }

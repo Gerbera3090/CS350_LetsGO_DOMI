@@ -147,6 +147,13 @@ export class LMRepository {
     return res[0].insertId;
   }
 
+  async deleteFLM(lmId: number, userId: number): Promise<boolean> {
+    const res = await this.db
+      .delete(FLM)
+      .where(and(eq(FLM.lmId, lmId), eq(FLM.userId, userId)))
+      .execute();
+    return true;
+  }
   // async insertFLMData(
   //   lmId: number,
   //   trackerId: number,
