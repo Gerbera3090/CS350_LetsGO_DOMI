@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 2,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 1000,
+    "alarmed": false
+  },
+  {
+    "id": 2,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 1,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 0,
+    "alarmed": false
+  },
+  {
+    "id": 3,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 1,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 0,
+    "alarmed": false
+  },
+  {
+    "id": 4,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 1,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 0,
+    "alarmed": false
+  },
+  {
+    "id": 5,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 2,
+    "reportStatusEnum": 2,
+    "code": "ARE_3_4_D_1",
+    "last": 1000,
+    "alarmed": false
+  },
+  {
+    "id": 6,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 1,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 1000,
+    "alarmed": false
+  },
+  {
+    "id": 7,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 2,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 500,
+    "alarmed": false
+  },
+  {
+    "id": 8,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 1,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 0,
+    "alarmed": false
+  },
+  {
+    "id": 9,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 2,
+    "reportStatusEnum": 1,
+    "code": "ARE_3_4_D_1",
+    "last": 60,
+    "alarmed": false
+  },
+  {
+    "id": 10,
+    "lmTypeEnum": 1,
+    "lmStatusEnum": 1,
+    "reportStatusEnum": 2,
+    "code": "ARE_3_4_D_1",
+    "last": 1000,
+    "alarmed": false
+  }
+]

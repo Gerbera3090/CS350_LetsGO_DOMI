@@ -2,7 +2,6 @@
   {
     "id": 1,
     "email": "john.doe@example.com",
-    "login_id": "john_doe",
     "password": "password123",
     "name": "John Doe",
     "dormitory_id": 101,
@@ -13,7 +12,6 @@
   {
     "id": 2,
     "email": "jane.smith@example.com",
-    "login_id": "jane_smith",
     "password": "password456",
     "name": "Jane Smith",
     "dormitory_id": 102,
@@ -24,7 +22,6 @@
   {
     "id": 3,
     "email": "mark.jones@example.com",
-    "login_id": "mark_jones",
     "password": "password789",
     "name": "Mark Jones",
     "dormitory_id": 103,
@@ -35,7 +32,6 @@
   {
     "id": 4,
     "email": "emily.white@example.com",
-    "login_id": "emily_white",
     "password": "password321",
     "name": "Emily White",
     "dormitory_id": 104,
@@ -46,7 +42,6 @@
   {
     "id": 5,
     "email": "alex.brown@example.com",
-    "login_id": "alex_brown",
     "password": "password654",
     "name": "Alex Brown",
     "dormitory_id": 105,

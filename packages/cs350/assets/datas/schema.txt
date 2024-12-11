@@ -9,3 +9,12 @@ CREATE TABLE Users (
     dormitory_room  INT
     gender          INT
 )
+
+
+CREATE TABLE LM (
+    id              INT
+    time            VARCHAR(10), //"01:10:25",
+    status          VARCHAR(10), // "Occupied",
+    location        VARCHAR(10), //"2F-3",
+    type            INT
+)

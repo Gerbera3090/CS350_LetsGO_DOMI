@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'models.dart';
+import 'models.dart'; // Assuming your user model is in models.dart
+import 'dormitory.dart'; // Import DormitoryTab widget
+import 'favorites.dart'; // Import FavoritesTab widget
+import 'my.dart'; // Import MyTab widget
+
 
 class MainScreen extends StatefulWidget {
   final User user;
@@ -16,7 +20,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    _selectedIndex = 0; // 처음 선택된 탭 인덱스
+    _selectedIndex = 1; // 처음 선택된 탭 인덱스
   }
 
   void _onItemTapped(int index) {
@@ -28,6 +32,7 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: null,
         title: Row(
@@ -58,10 +63,10 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
       ),
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [
-          Center(child: Text('Home Tab Content')),
-          Center(child: Text('Messages Tab Content')),
-          Center(child: Text('Settings Tab Content')),
+        children: [
+          DormitoryTab(user: widget.user),  // Dormitory Tab
+          FavoritesTab(user: widget.user),  // Favorites Tab
+          MyTab(user: widget.user),        // My Tab
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -70,21 +75,21 @@ class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateM
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/photos/tab/dormitory.png', // 로고 이미지
+              'assets/photos/tab/dormitory_1.png', // 로고 이미지
               height: 40, // 로고 크기
             ),
             label: 'dormitory',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/photos/tab/favorite.png', // 로고 이미지
+              'assets/photos/tab/favorites_1.png', // 로고 이미지
               height: 40, // 로고 크기
             ),
             label: 'favorites',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/photos/tab/My.png', // 로고 이미지
+              'assets/photos/tab/My_1.png', // 로고 이미지
               height: 40, // 로고 크기
             ),
             label: 'My',
