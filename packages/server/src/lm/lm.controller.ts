@@ -1,6 +1,11 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { LMService } from './lm.service';
-import { ApiLmc001RequestQuery, ApiLmc001Response } from '@depot/api/lm';
+import {
+  ApiLmc001RequestQuery,
+  ApiLmc001Response,
+  ApiLmc003Response,
+  ApiLmc003RequestBody,
+} from '@depot/api/lm';
 
 @Controller()
 export class LMController {
@@ -27,5 +32,15 @@ export class LMController {
       dormitoryFloorId: parsedFloorId,
     });
     return res;
+  }
+
+  // FLM을 추가하는 API
+  @Post('/lms/flm')
+  async postFLM(
+    @Body() body: ApiLmc003RequestBody,
+  ): Promise<ApiLmc003Response> {
+    console.log(JSON.stringify({ body }));
+    const res = await this.lmService.postFLM(body.lmId, body.userId);
+    return { flmId: res };
   }
 }

@@ -44,4 +44,21 @@ export class LMService {
 
     return { lms: lms };
   }
+
+  async postFLM(lmId: number, userId: number): Promise<number> {
+    const checkAlreadyFLM = await this.lmRepository.selectFLM({ userId, lmId });
+    if (checkAlreadyFLM.length > 0) {
+      throw new Error('Already FLM');
+    }
+    const flms = await this.lmRepository.selectFLM({ userId }, {}, [
+      { priority: 'DESC' },
+    ]);
+    let priority = 1;
+    if (flms.length > 0) {
+      // 가장 낮은 priority로 더해줌
+      priority = flms[0].priority + 1;
+    }
+    const res = await this.lmRepository.insertFLM(lmId, userId, priority);
+    return res;
+  }
 }

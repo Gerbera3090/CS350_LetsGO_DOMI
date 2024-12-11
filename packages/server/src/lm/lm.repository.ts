@@ -10,6 +10,7 @@ import {
   LaundryRoom,
   UsageAlarm,
   FLM,
+  FLMT,
 } from 'src/db/schema';
 import * as schema from 'src/db/schema';
 
@@ -81,6 +82,69 @@ export class LMRepository {
       .execute();
 
     return res as LMStatus[];
+  }
+
+  async selectFLM(
+    target: Partial<FLMT>,
+    isNullCondition?: Partial<Record<keyof FLMT, boolean>>,
+    orderByCondition?: Partial<Record<keyof FLMT, 'ASC' | 'DESC'>>[],
+  ): Promise<FLMT[]> {
+    const { id, lmId, userId } = target;
+    let query = this.db.select().from(FLM).$dynamic();
+
+    const whereConditions: any[] = [];
+    if (id) {
+      whereConditions.push(eq(FLM.id, id));
+    }
+    if (lmId) {
+      whereConditions.push(eq(FLM.lmId, lmId));
+    }
+    if (userId) {
+      whereConditions.push(eq(FLM.userId, userId));
+    }
+
+    if (isNullCondition) {
+      Object.entries(isNullCondition).forEach(([key, value]) => {
+        whereConditions.push(
+          value
+            ? isNull(FLM[key as keyof FLMT])
+            : isNotNull(FLM[key as keyof FLMT]),
+        );
+      });
+    }
+
+    // 조건이 하나라도 있으면 AND로 묶어서 처리
+    if (whereConditions.length > 0) {
+      query = query.where(and(...whereConditions));
+    }
+    if (orderByCondition !== undefined) {
+      const orderByConditions = orderByCondition.map((order) => {
+        const [key, value] = Object.entries(order)[0]; // 각 항목을 키와 값으로 분리
+        return value === 'ASC'
+          ? asc(FLM[key as keyof FLMT])
+          : desc(FLM[key as keyof FLMT]);
+      });
+      if (orderByConditions.length > 0) {
+        query = query.orderBy(...orderByConditions);
+      }
+    }
+
+    // 쿼리 실행
+    const res = await query.execute();
+    return res;
+  }
+
+  async insertFLM(
+    lmId: number,
+    userId: number,
+    priority: number,
+  ): Promise<number> {
+    const res = await this.db.insert(FLM).values({
+      lmId,
+      userId,
+      priority,
+    });
+    return res[0].insertId;
   }
 
   // async insertFLMData(
