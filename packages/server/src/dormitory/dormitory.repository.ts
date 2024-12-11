@@ -3,7 +3,12 @@ import { eq, isNotNull, isNull, and, asc, desc } from 'drizzle-orm';
 import { MySql2Database } from 'drizzle-orm/mysql2';
 import { DBAsyncProvider } from 'src/db/db.provider';
 import * as schema from 'src/db/schema';
-import { Dormitory, DormitoryT } from 'src/db/schema';
+import {
+  Dormitory,
+  DormitoryT,
+  DormitoryFloor,
+  DormitoryFloorT,
+} from 'src/db/schema';
 
 @Injectable()
 export class DormitoryRepository {
@@ -55,6 +60,55 @@ export class DormitoryRepository {
         return value === 'ASC'
           ? asc(Dormitory[key as keyof DormitoryT])
           : desc(Dormitory[key as keyof DormitoryT]);
+      });
+      if (orderByConditions.length > 0) {
+        query = query.orderBy(...orderByConditions);
+      }
+    }
+
+    // 쿼리 실행
+    const res = await query.execute();
+    return res;
+  }
+
+  async selectFloor(
+    target: Partial<DormitoryFloorT>,
+    isNullCondition?: Partial<Record<keyof DormitoryFloorT, boolean>>,
+    orderByCondition?: Partial<Record<keyof DormitoryFloorT, 'ASC' | 'DESC'>>[],
+  ): Promise<DormitoryFloorT[]> {
+    const { id, dormitoryId, floor } = target;
+    let query = this.db.select().from(DormitoryFloor).$dynamic();
+
+    const whereConditions: any[] = [];
+    if (id) {
+      whereConditions.push(eq(DormitoryFloor.id, id));
+    }
+    if (dormitoryId) {
+      whereConditions.push(eq(DormitoryFloor.dormitoryId, dormitoryId));
+    }
+    if (floor) {
+      whereConditions.push(eq(DormitoryFloor.floor, floor));
+    }
+    if (isNullCondition) {
+      Object.entries(isNullCondition).forEach(([key, value]) => {
+        whereConditions.push(
+          value
+            ? isNull(DormitoryFloor[key as keyof DormitoryFloorT])
+            : isNotNull(DormitoryFloor[key as keyof DormitoryFloorT]),
+        );
+      });
+    }
+
+    // 조건이 하나라도 있으면 AND로 묶어서 처리
+    if (whereConditions.length > 0) {
+      query = query.where(and(...whereConditions));
+    }
+    if (orderByCondition !== undefined) {
+      const orderByConditions = orderByCondition.map((order) => {
+        const [key, value] = Object.entries(order)[0]; // 각 항목을 키와 값으로 분리
+        return value === 'ASC'
+          ? asc(DormitoryFloor[key as keyof DormitoryFloorT])
+          : desc(DormitoryFloor[key as keyof DormitoryFloorT]);
       });
       if (orderByConditions.length > 0) {
         query = query.orderBy(...orderByConditions);

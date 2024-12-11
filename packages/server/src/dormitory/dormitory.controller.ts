@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { DormitoryService } from './dormitory.service';
+import { ApiDor001Response } from '@depot/api/dormitory';
 
 @Controller()
 export class DormitoryController {
@@ -7,6 +8,18 @@ export class DormitoryController {
   @Get('/dormitories/hello')
   getHello(): string {
     return 'hello in dormitory';
+  }
+
+  @Get('/dormitories/floors')
+  getFloors(
+    @Query('dormitoryId') dormitoryId: string,
+  ): Promise<ApiDor001Response> {
+    const parsedDormitoryId = Number(dormitoryId);
+    if (isNaN(parsedDormitoryId)) {
+      throw new Error('Invalid dormitoryId'); // lmId 유효성 검사
+    }
+    const res = this.dormitoryService.getFloors(parsedDormitoryId);
+    return res;
   }
 
   // // Tracker가 track을 보내는 API
