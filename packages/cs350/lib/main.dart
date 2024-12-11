@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'main_screen.dart';
+import 'models.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,98 +32,235 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const Login(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Login> createState() => _Login();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _Login extends State<Login> {
+  bool _isLoading = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  void _incrementCounter() {
+  final ButtonStyle enable_login = ElevatedButton.styleFrom(
+    shape: RoundedRectangleBorder(	//모서리를 둥글게
+        borderRadius: BorderRadius.circular(0)),
+    textStyle: const TextStyle(fontSize: 20),
+    backgroundColor: Color(0xffD2D2D2),
+    foregroundColor: Colors.white, // 기본 글씨 색
+  );
+
+  final ButtonStyle filled_login = ElevatedButton.styleFrom(
+    shape: RoundedRectangleBorder(	//모서리를 둥글게
+        borderRadius: BorderRadius.circular(0)),
+    textStyle: const TextStyle(fontSize: 20),
+    backgroundColor: Color(0xff257457),
+    foregroundColor: Colors.white,
+  );
+
+  ButtonStyle get buttonStyle {
+    if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+      return filled_login; // 두 필드 모두 채워졌을 때
+    } else {
+      return enable_login; // 하나라도 비어 있으면 기본 스타일
+    }
+  }
+
+  Future<void> _login() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    // 로딩 상태 표시
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _isLoading = true;
+    });
+
+    // JSON 데이터 가져오기
+    String data = await rootBundle.loadString('assets/datas/dummies.json');
+    List<dynamic> users = json.decode(data);
+
+    // 입력된 이메일과 비밀번호가 일치하는 사용자가 있는지 확인
+    var user = users.firstWhere(
+          (user) => user['email'] == email && user['password'] == password,
+      orElse: () => null, // 일치하는 유저가 없으면 null 반환
+    );
+
+    // 로그인 처리
+    if (user != null) {
+      // 로그인 성공 시 MainScreen으로 이동
+      User curUser = User.fromJson(user); // JSON에서 User 객체로 변환
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen(user: curUser)),
+      );
+    } else {
+      // 로그인 실패 시 에러 메시지 표시
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Login Failed'),
+          content: const Text('Invalid email or password.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 로딩 상태 종료
+    setState(() {
+      _isLoading = false;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+  Widget build(BuildContext context)
+  {
+    const greycolor = 0xffD2D2D2;
+    const pointgreen = 0xff257457;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double textfieldWidth = 0.8*screenWidth;
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/photos/logo.png', // 로컬 이미지
+            width: 0.7*screenWidth,
+            fit: BoxFit.fitWidth
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: textfieldWidth,
+                  child: TextField(
+                    controller: _emailController,
+                    onChanged: (_) => setState(() {}),
+                    decoration: InputDecoration(
+                      hintText: 'example@kaist.ac.kr',
+                        hintStyle: TextStyle(
+                          color: Color(greycolor), // hintText 색 설정
+                        ),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.7),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(greycolor),
+                            width: 1.0,
+                          ),
+                        borderRadius: BorderRadius.all(Radius.zero)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black.withOpacity(0.7), // 클릭 시 테두리 색 변경
+                          width: 1.0, // 클릭 시 테두리 두께 변경
+                        ),
+                        borderRadius: BorderRadius.all(Radius.zero),
+                      ),
+                    ),
+                  )
+                ),
+                // 비밀번호 입력 필드
+                SizedBox(
+                  width: textfieldWidth,
+                  child : TextField(
+                    controller: _passwordController,
+                    onChanged: (_) => setState(() {}),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'password',
+                        hintStyle: TextStyle(
+                          color: Color(greycolor), // hintText 색 설정
+                        ),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.7),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(greycolor),
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.zero)
+                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black.withOpacity(0.7), // 클릭 시 테두리 색 변경
+                          width: 1.0, // 클릭 시 테두리 두께 변경
+                        ),
+                        borderRadius: BorderRadius.all(Radius.zero),
+                      )
+                    )
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // 로그인 버튼
+                SizedBox(
+                  width: textfieldWidth,
+                    child: ElevatedButton(
+                    onPressed: _login,
+                    child: const Text('Login'),
+                    style: buttonStyle,
+                  )
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Find ID',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey
+                      ),
+                    ),
+                    const VerticalDivider(
+                      color: Colors.black,  // 세로줄 색상
+                      thickness: 2,         // 세로줄 두께
+                      width: 20,            // 세로줄 양옆 여백
+                    ),
+                    Text(
+                      'Find Password',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey
+                      ),
+                    ),
+                    const VerticalDivider(
+                      color: Colors.black,  // 세로줄 색상
+                      thickness: 2,         // 세로줄 두께
+                      width: 20,            // 세로줄 양옆 여백
+                    ),
+                    Text(
+                      'Join',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
