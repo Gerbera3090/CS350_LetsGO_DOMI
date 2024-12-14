@@ -5,7 +5,7 @@ import { ReserveAlarmT, UsageAlarmT, TrackT } from '@schema';
 @Injectable()
 export class MonitorPublicService {
   constructor(private readonly monitorRepository: MonitorRepository) {}
-  async checkUsing(intensity: number): Promise<boolean> {
+  checkUsing(intensity: number): boolean {
     const BORDER_LINE = 1015;
     return intensity < BORDER_LINE;
   }
@@ -27,7 +27,7 @@ export class MonitorPublicService {
       {},
       [{ createdAt: 'DESC' }],
     );
-
+    console.log(JSON.stringify({ res, lmId, alarmed: false }));
     return res.length > 0 ? res[0] : null;
   }
 

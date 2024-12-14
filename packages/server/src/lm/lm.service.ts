@@ -29,7 +29,7 @@ export class LMService {
         const trackNewest =
           await this.monitorPublicService.getNewestTrackByLMId(lm.id);
         const checkUsing = trackNewest
-          ? await this.monitorPublicService.checkUsing(trackNewest.intensity)
+          ? this.monitorPublicService.checkUsing(trackNewest.intensity)
           : false;
         const usageAlarm =
           await this.monitorPublicService.getUsageAlarmByUserIdAndLMId(
@@ -76,7 +76,7 @@ export class LMService {
         const trackNewest =
           await this.monitorPublicService.getNewestTrackByLMId(flm.lmId);
         const checkUsing = trackNewest
-          ? await this.monitorPublicService.checkUsing(trackNewest.intensity)
+          ? this.monitorPublicService.checkUsing(trackNewest.intensity)
           : false;
         const usageAlarm =
           await this.monitorPublicService.getUsageAlarmByUserIdAndLMId(

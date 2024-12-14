@@ -100,7 +100,7 @@ export class MonitorRepository {
     if (userId) {
       whereConditions.push(eq(schema.UsageAlarm.userId, userId));
     }
-    if (alarmed) {
+    if (alarmed !== undefined) {
       whereConditions.push(eq(schema.UsageAlarm.alarmed, alarmed));
     }
 
@@ -179,7 +179,7 @@ export class MonitorRepository {
     if (lmId) {
       whereConditions.push(eq(schema.UsageAlarm.lmId, lmId));
     }
-    if (alarmed) {
+    if (alarmed !== undefined) {
       whereConditions.push(eq(schema.UsageAlarm.alarmed, alarmed));
     }
 

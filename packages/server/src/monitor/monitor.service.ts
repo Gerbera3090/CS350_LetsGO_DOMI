@@ -19,6 +19,8 @@ export class MonitorService {
     body: ApiMnt001RequestBody,
   ): Promise<ApiMnt001Response> {
     console.log(JSON.stringify({ param, body }));
+
+    // diff와 last를 계산: 복잡하게 merge하지 않고 한 행에서 끝내기 위함 (like memoization)
     const prevTrack = await this.MonitorRepository.selectTrack(
       { trackerId: body.trackerId },
       {},
@@ -30,14 +32,52 @@ export class MonitorService {
       const prev = prevTrack[0];
       const now = new Date();
       if (
-        (await this.monitorPublicService.checkUsing(prev.intensity)) &&
-        (await this.monitorPublicService.checkUsing(body.intensity))
+        this.monitorPublicService.checkUsing(prev.intensity) &&
+        this.monitorPublicService.checkUsing(body.intensity)
       ) {
         diff = now.getTime() - prev.createdAt.getTime();
         last = prev.last + Math.ceil(diff / 1000);
       }
     }
 
+    // 만약 Track이 꺼졌다면 쌓여있는 usageAlarm 과 reserveAlarm을 체크하기
+    if (
+      prevTrack.length > 0 &&
+      this.monitorPublicService.checkUsing(prevTrack[0].intensity) &&
+      !this.monitorPublicService.checkUsing(body.intensity)
+    ) {
+      // 세탁기 사용의 종료 (using 이 true이다가 false로 바뀜)
+      // 1. 사용 알람이 있는지 확인
+      const usageAlarm = await this.MonitorRepository.selectUsageAlarm({
+        lmId: param.lmId,
+        alarmed: false,
+      });
+
+      if (usageAlarm.length > 0) {
+        // TODO: 푸시알람 보내는 로직
+        // 사용 알람이 있으면 삭제
+        await this.MonitorRepository.updateUsageAlarm(
+          { alarmed: true },
+          { lmId: param.lmId },
+        );
+      }
+
+      // 2. 예약 알람이 있는지 확인
+      const reserveAlarm = await this.MonitorRepository.selectReserveAlarm({
+        lmId: param.lmId,
+        alarmed: false,
+      });
+      if (reserveAlarm.length > 0) {
+        // TODO: 푸시알람 보내는 로직
+        // 예약 알람이 있으면 삭제
+        await this.MonitorRepository.updateReserveAlarm(
+          { alarmed: true },
+          { lmId: param.lmId },
+        );
+      }
+    }
+
+    // data insert
     const res = await this.MonitorRepository.insertTrackData(
       param.lmId,
       body.trackerId,
