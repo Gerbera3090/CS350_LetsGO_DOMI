@@ -14,7 +14,7 @@ export type ApiLmc002Response = {
     lmTypeEnum: number;
     reportStatusEnum: number;
     lmStatusEnum: number;
-    last: number | null; // 만약 가동중이면 몇초동안 가동중이었는지 초 단위
+    last: number; // 만약 가동중이면 몇초동안 가동중이었는지 초 단위
     alarmed: boolean;
   }[];
 };

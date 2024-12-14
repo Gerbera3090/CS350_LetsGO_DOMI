@@ -2,6 +2,7 @@ import { mysqlTable, int, timestamp, foreignKey } from 'drizzle-orm/mysql-core';
 import { ReportStatusEnum } from './enum.schema';
 import { User } from './user.schema';
 import { LM } from './lm.schema';
+import { InferSelectModel } from 'drizzle-orm';
 
 // Report 테이블
 export const Report = mysqlTable(
@@ -34,3 +35,5 @@ export const Report = mysqlTable(
     }),
   }),
 );
+
+export type ReportT = InferSelectModel<typeof Report>;
