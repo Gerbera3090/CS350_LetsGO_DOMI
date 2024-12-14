@@ -23,7 +23,7 @@ export class MonitorPublicService {
     lmId: number,
   ): Promise<UsageAlarmT | null> {
     const res = await this.monitorRepository.selectUsageAlarm(
-      { userId, lmId },
+      { userId, lmId, alarmed: false },
       {},
       [{ createdAt: 'DESC' }],
     );
@@ -36,7 +36,7 @@ export class MonitorPublicService {
     lmId: number,
   ): Promise<ReserveAlarmT | null> {
     const res = await this.monitorRepository.selectReserveAlarm(
-      { userId, lmId },
+      { userId, lmId, alarmed: false },
       {},
       [{ createdAt: 'DESC' }],
     );

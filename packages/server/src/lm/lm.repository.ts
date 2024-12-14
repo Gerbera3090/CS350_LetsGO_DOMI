@@ -299,6 +299,40 @@ export class LMRepository {
     return res;
   }
 
+  async selectFLMWithLMAndFloor(userId: number): Promise<
+    {
+      id: number;
+      lmId: number;
+      priority: number;
+      userId: number;
+      code: string;
+      floor: number;
+      lmTypeEnum: number;
+    }[]
+  > {
+    const res = await this.db
+      .select({
+        id: FLM.id,
+        lmId: FLM.lmId,
+        userId: FLM.userId,
+        priority: FLM.priority,
+        code: LM.code,
+        floor: schema.DormitoryFloor.floor,
+        lmTypeEnum: LM.lmTypeEnumId,
+      })
+      .from(FLM)
+      .innerJoin(LM, eq(FLM.lmId, LM.id))
+      .innerJoin(LaundryRoom, eq(LM.laundryRoomId, LaundryRoom.id))
+      .innerJoin(
+        schema.DormitoryFloor,
+        eq(LaundryRoom.dormitoryFloorId, schema.DormitoryFloor.id),
+      )
+      .where(eq(FLM.userId, userId))
+      .orderBy(asc(FLM.priority))
+      .execute();
+    return res;
+  }
+
   // async insertFLMData(
   //   lmId: number,
   //   trackerId: number,

@@ -13,4 +13,13 @@ export class DormitoryPublicService {
     }
     return res[0];
   }
+  async getDormitoryFloorInfo(dormitoryFloorId: number) {
+    const res = await this.DormitoryRepository.selectFloor({
+      id: dormitoryFloorId,
+    });
+    if (res.length !== 1) {
+      throw new Error('Invalid dormitoryFloorId');
+    }
+    return res[0];
+  }
 }

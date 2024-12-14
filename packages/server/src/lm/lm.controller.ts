@@ -15,6 +15,7 @@ import {
   ApiLmc003RequestBody,
   ApiLmc004RequestBody,
   ApiLmc004Response,
+  ApiLmc002Response,
 } from '@depot/api/lm';
 
 @Controller()
@@ -41,6 +42,19 @@ export class LMController {
       userId: parsedUserId,
       dormitoryFloorId: parsedFloorId,
     });
+    return res;
+  }
+
+  // flm을 조회하는 API
+  // 만약 USING인 FLM 이 있다면 맨 위로 주고, 그다음 order by priority
+  @Get('/lms/flms')
+  async getFLMs(@Query('userId') userId: string): Promise<ApiLmc002Response> {
+    console.log('GET /lms/flms');
+    const parsedUserId = Number(userId);
+    if (isNaN(parsedUserId)) {
+      throw new Error('Invalid parsed Id');
+    }
+    const res = await this.lmService.getFLMs(parsedUserId);
     return res;
   }
 

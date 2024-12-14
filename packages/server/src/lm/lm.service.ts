@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { LMRepository } from './lm.repository';
-import { ApiLmc001RequestQuery, ApiLmc001Response } from '@depot/api/lm';
+import {
+  ApiLmc001RequestQuery,
+  ApiLmc001Response,
+  ApiLmc002Response,
+} from '@depot/api/lm';
 import { UserPublicService } from 'src/user/user.public.service';
 import { MonitorPublicService } from 'src/monitor/monitor.public.service';
 import { LMStatusE } from '@schema';
@@ -63,6 +67,64 @@ export class LMService {
 
     return { lms: lms };
   }
+
+  async getFLMs(userId: number): Promise<ApiLmc002Response> {
+    const res = await this.lmRepository.selectFLMWithLMAndFloor(userId);
+
+    const flms = await Promise.all(
+      res.map(async (flm) => {
+        const trackNewest =
+          await this.monitorPublicService.getNewestTrackByLMId(flm.lmId);
+        const checkUsing = trackNewest
+          ? await this.monitorPublicService.checkUsing(trackNewest.intensity)
+          : false;
+        const usageAlarm =
+          await this.monitorPublicService.getUsageAlarmByUserIdAndLMId(
+            userId,
+            flm.lmId,
+          );
+        const reserveAlarm =
+          await this.monitorPublicService.getReserveAlarmByUserIdAndLMId(
+            userId,
+            flm.lmId,
+          );
+        const reportStatus = await this.lmRepository.selectReport(
+          { lmId: flm.lmId },
+          {},
+          [{ createdAt: 'DESC' }],
+        );
+        console.log(JSON.stringify({ usageAlarm }));
+        return {
+          id: flm.lmId,
+          code: flm.code,
+          lmTypeEnum: flm.lmTypeEnum,
+          floor: flm.floor,
+          priority: flm.priority,
+          lmStatusEnum: checkUsing // 사용 중
+            ? usageAlarm // 내가 사용 중?
+              ? LMStatusE.Using
+              : LMStatusE.Occupied
+            : LMStatusE.Available,
+          last: trackNewest && checkUsing ? trackNewest.last : 0,
+          alarmed: reserveAlarm ? !reserveAlarm.alarmed : false,
+          reportStatusEnum:
+            reportStatus.length > 0 ? reportStatus[0].reportStatusEnumId : 0,
+        };
+      }),
+    );
+
+    // Using 만 앞으로 옮기기
+    const usingFlms = flms.filter(
+      (flm) => flm.lmStatusEnum === LMStatusE.Using,
+    );
+    const otherFlms = flms.filter(
+      (flm) => flm.lmStatusEnum !== LMStatusE.Using,
+    );
+    const sortedFlms = usingFlms.concat(otherFlms);
+
+    return { flms: sortedFlms };
+  }
+
   // async getLMs(query: ApiLmc001RequestQuery): Promise<ApiLmc001Response> {
   //   console.log(JSON.stringify({ query }));
   //   const { userId, dormitoryFloorId } = query;
