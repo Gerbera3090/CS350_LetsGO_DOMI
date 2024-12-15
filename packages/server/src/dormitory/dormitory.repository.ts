@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq, isNotNull, isNull, and, asc, desc } from 'drizzle-orm';
 import { MySql2Database } from 'drizzle-orm/mysql2';
-import { DBAsyncProvider } from 'src/db/db.provider';
-import * as schema from 'src/db/schema';
+import { DBAsyncProvider } from '../db/db.provider';
+import * as schema from '@schema';
 import {
   Dormitory,
   DormitoryT,
   DormitoryFloor,
   DormitoryFloorT,
-} from 'src/db/schema';
+} from '@schema';
 
 @Injectable()
 export class DormitoryRepository {

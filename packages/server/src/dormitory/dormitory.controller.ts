@@ -15,7 +15,7 @@ export class DormitoryController {
     @Query('dormitoryId') dormitoryId: string,
   ): Promise<ApiDor001Response> {
     const parsedDormitoryId = Number(dormitoryId);
-    if (isNaN(parsedDormitoryId)) {
+    if (isNaN(parsedDormitoryId) || parsedDormitoryId <= 0) {
       throw new Error('Invalid dormitoryId'); // lmId 유효성 검사
     }
     const res = this.dormitoryService.getFloors(parsedDormitoryId);
