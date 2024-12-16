@@ -3,56 +3,6 @@ import { DormitoryPublicService } from './dormitory.public.service';
 import { DormitoryRepository } from './dormitory.repository';
 import { DBModule } from '../db/db.module'; // 실제 DB 연결 모듈 import
 
-describe('DormitoryPublicService (Integration Test)', () => {
-  let service: DormitoryPublicService;
-
-  beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      imports: [DBModule], // DbModule에서 Drizzle ORM 및 연결 관리
-      providers: [DormitoryPublicService, DormitoryRepository],
-    }).compile();
-
-    service = module.get<DormitoryPublicService>(DormitoryPublicService);
-  });
-
-  describe('getDormitoryInfo', () => {
-    it('should return dormitory info for valid ID', async () => {
-      const result = await service.getDormitoryInfo(1); // ID = 1
-      expect(result).toEqual({
-        id: 1,
-        name: '미르관',
-        nameEng: 'Mir Hall',
-        maxFloor: 15,
-        gender: 1,
-        code: 'MIR',
-      });
-    });
-
-    it('should throw an error for invalid dormitoryId', async () => {
-      await expect(service.getDormitoryInfo(999)).rejects.toThrow(
-        'Invalid dormitoryId',
-      );
-    });
-  });
-
-  describe('getDormitoryFloorInfo', () => {
-    it('should return dormitory floor info for valid ID', async () => {
-      const result = await service.getDormitoryFloorInfo(1); // Floor ID = 1
-      expect(result).toEqual({
-        id: 1,
-        dormitoryId: 1,
-        floor: 1,
-      });
-    });
-
-    it('should throw an error for invalid dormitoryFloorId', async () => {
-      await expect(service.getDormitoryFloorInfo(999)).rejects.toThrow(
-        'Invalid dormitoryFloorId',
-      );
-    });
-  });
-});
-
 describe('DormitoryPublicService', () => {
   let service: DormitoryPublicService;
   let repository: Partial<DormitoryRepository>;
@@ -110,6 +60,56 @@ describe('DormitoryPublicService', () => {
         'Invalid dormitoryFloorId',
       );
       expect(repository.selectFloor).toHaveBeenCalledWith({ id: 2 });
+    });
+  });
+});
+
+describe('DormitoryPublicService (Integration Test)', () => {
+  let service: DormitoryPublicService;
+
+  beforeAll(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [DBModule], // DbModule에서 Drizzle ORM 및 연결 관리
+      providers: [DormitoryPublicService, DormitoryRepository],
+    }).compile();
+
+    service = module.get<DormitoryPublicService>(DormitoryPublicService);
+  });
+
+  describe('getDormitoryInfo', () => {
+    it('should return dormitory info for valid ID', async () => {
+      const result = await service.getDormitoryInfo(1); // ID = 1
+      expect(result).toEqual({
+        id: 1,
+        name: '미르관',
+        nameEng: 'Mir Hall',
+        maxFloor: 15,
+        gender: 1,
+        code: 'MIR',
+      });
+    });
+
+    it('should throw an error for invalid dormitoryId', async () => {
+      await expect(service.getDormitoryInfo(999)).rejects.toThrow(
+        'Invalid dormitoryId',
+      );
+    });
+  });
+
+  describe('getDormitoryFloorInfo', () => {
+    it('should return dormitory floor info for valid ID', async () => {
+      const result = await service.getDormitoryFloorInfo(1); // Floor ID = 1
+      expect(result).toEqual({
+        id: 1,
+        dormitoryId: 1,
+        floor: 1,
+      });
+    });
+
+    it('should throw an error for invalid dormitoryFloorId', async () => {
+      await expect(service.getDormitoryFloorInfo(999)).rejects.toThrow(
+        'Invalid dormitoryFloorId',
+      );
     });
   });
 });

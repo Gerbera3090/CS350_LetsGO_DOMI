@@ -28,8 +28,17 @@ export class MonitorController {
     @Body() body: ApiMnt001RequestBody,
   ): Promise<ApiMnt001Response> {
     const parsedLmId = Number(lmId);
-    if (isNaN(parsedLmId)) {
+    if (isNaN(parsedLmId) || parsedLmId <= 0) {
       throw new Error('Invalid lmId'); // lmId 유효성 검사
+    }
+    if (
+      body.trackerId === undefined ||
+      body.intensity === undefined ||
+      body.trackerId <= 0 ||
+      body.intensity < 0 ||
+      body.intensity > 1023
+    ) {
+      throw new Error('Invalid body'); // body 유효성 검사
     }
     console.log(JSON.stringify({ lmId: parsedLmId, body }));
     const res = await this.monitorService.postTrackData(
@@ -51,6 +60,14 @@ export class MonitorController {
   ): Promise<ApiMnt003Response> {
     console.log('POST /monitor/usage-alarm');
     console.log(JSON.stringify({ body }));
+    if (
+      body.lmId === undefined ||
+      body.userId === undefined ||
+      body.lmId <= 0 ||
+      body.userId <= 0
+    ) {
+      throw new Error('Invalid body'); // body 유효성 검사
+    }
     const res = await this.monitorService.postUsageAlarm(
       body.lmId,
       body.userId,
@@ -64,6 +81,14 @@ export class MonitorController {
   ): Promise<ApiMnt004Response> {
     console.log('DELETE /monitor/usage-alarm');
     console.log(JSON.stringify({ body }));
+    if (
+      body.lmId === undefined ||
+      body.userId === undefined ||
+      body.lmId <= 0 ||
+      body.userId <= 0
+    ) {
+      throw new Error('Invalid body'); // body 유효성 검사
+    }
     const res = await this.monitorService.deleteUsageAlarm(
       body.lmId,
       body.userId,
@@ -78,6 +103,14 @@ export class MonitorController {
   ): Promise<ApiMnt005Response> {
     console.log('POST /lms/flm');
     console.log(JSON.stringify({ body }));
+    if (
+      body.lmId === undefined ||
+      body.userId === undefined ||
+      body.lmId <= 0 ||
+      body.userId <= 0
+    ) {
+      throw new Error('Invalid body'); // body 유효성 검사
+    }
     const res = await this.monitorService.postReserveAlarm(
       body.lmId,
       body.userId,
@@ -92,6 +125,14 @@ export class MonitorController {
   ): Promise<ApiMnt005Response> {
     console.log('DELETE /lms/flm');
     console.log(JSON.stringify({ body }));
+    if (
+      body.lmId === undefined ||
+      body.userId === undefined ||
+      body.lmId <= 0 ||
+      body.userId <= 0
+    ) {
+      throw new Error('Invalid body'); // body 유효성 검사
+    }
     const res = await this.monitorService.deleteReserveAlarm(
       body.lmId,
       body.userId,

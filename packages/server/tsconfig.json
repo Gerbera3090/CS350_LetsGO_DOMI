@@ -10,10 +10,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-
+    "types": ["node", "jest"],
     "paths": {
       "@depot/*": ["../depot/*"], // depot 디렉토리의 경로를 설정
-
+      "src/*": ["./src/*"],
       "@schema": ["./src/db/schema"]
     },
 

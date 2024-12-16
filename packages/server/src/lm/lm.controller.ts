@@ -34,7 +34,12 @@ export class LMController {
   ): Promise<ApiLmc001Response> {
     const parsedUserId = Number(userId);
     const parsedFloorId = Number(dormitoryFloorId);
-    if (isNaN(parsedUserId) || isNaN(parsedFloorId)) {
+    if (
+      isNaN(parsedUserId) ||
+      isNaN(parsedFloorId) ||
+      parsedUserId <= 0 ||
+      parsedFloorId <= 0
+    ) {
       throw new Error('Invalid parsed Id'); // lmId 유효성 검사
     }
     console.log(JSON.stringify({ userId, dormitoryFloorId }));
@@ -51,7 +56,7 @@ export class LMController {
   async getFLMs(@Query('userId') userId: string): Promise<ApiLmc002Response> {
     console.log('GET /lms/flms');
     const parsedUserId = Number(userId);
-    if (isNaN(parsedUserId)) {
+    if (isNaN(parsedUserId) || parsedUserId <= 0) {
       throw new Error('Invalid parsed Id');
     }
     const res = await this.lmService.getFLMs(parsedUserId);
@@ -65,6 +70,9 @@ export class LMController {
   ): Promise<ApiLmc003Response> {
     console.log('POST /lms/flm');
     console.log(JSON.stringify({ body }));
+    if (!body.lmId || !body.userId || body.lmId <= 0 || body.userId <= 0) {
+      throw new Error('Invalid parsed Id');
+    }
     const res = await this.lmService.postFLM(body.lmId, body.userId);
     return { flmId: res };
   }
@@ -75,6 +83,9 @@ export class LMController {
   ): Promise<ApiLmc004Response> {
     console.log('DELETE /lms/flm');
     console.log(JSON.stringify({ body }));
+    if (!body.lmId || !body.userId || body.lmId <= 0 || body.userId <= 0) {
+      throw new Error('Invalid parsed Id');
+    }
     const res = await this.lmService.deleteFLM(body.lmId, body.userId);
     return { flmId: res };
   }

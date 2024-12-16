@@ -8,6 +8,7 @@ import {
 import { UserPublicService } from 'src/user/user.public.service';
 import { MonitorPublicService } from 'src/monitor/monitor.public.service';
 import { LMStatusE } from '@schema';
+import { DormitoryPublicService } from 'src/dormitory/dormitory.public.service';
 
 @Injectable()
 export class LMService {
@@ -15,12 +16,14 @@ export class LMService {
     private readonly lmRepository: LMRepository,
     private readonly userPublicService: UserPublicService,
     private readonly monitorPublicService: MonitorPublicService,
+    private readonly dormitoryPublicService: DormitoryPublicService,
   ) {}
 
   async getLMs(query: ApiLmc001RequestQuery): Promise<ApiLmc001Response> {
     console.log(JSON.stringify({ query }));
     const { userId, dormitoryFloorId } = query;
-
+    await this.dormitoryPublicService.getDormitoryFloorInfo(dormitoryFloorId);
+    await this.userPublicService.getUserInfo(userId);
     const res =
       await this.lmRepository.selectLMsByDormitoryFloorId(dormitoryFloorId);
 
@@ -69,6 +72,7 @@ export class LMService {
   }
 
   async getFLMs(userId: number): Promise<ApiLmc002Response> {
+    await this.userPublicService.getUserInfo(userId);
     const res = await this.lmRepository.selectFLMWithLMAndFloor(userId);
 
     const flms = await Promise.all(
